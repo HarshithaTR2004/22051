@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login with CAPTCHA</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <h2>Login Form</h2>
+    <form id="loginForm" onsubmit="return validateForm()">
+        <label for="username">Username:</label>
+        <input type="text" id="username" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" required><br><br>
+
+        <div id="captchaContainer">
+            <div id="captchaImage">
+                
+            </div>
+            <input type="text" id="captchaInput" placeholder="Enter CAPTCHA" required>
+            <button type="button" id="refreshCaptcha" onclick="generateCaptcha()">Refresh</button>
+            <input type="hidden" id="captchaHidden" name="captchaHidden">
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+        // Function to generate a random CAPTCHA code
+        function generateCaptcha() {
+            // Generate a random 4-digit number as the CAPTCHA
+            var captchaCode = Math.floor(1000 + Math.random() * 9000);
+
+            // Display the CAPTCHA image
+            var captchaImage = document.getElementById("captchaImage");
+            captchaImage.innerHTML = captchaCode;
+
+            // Store the CAPTCHA code in a hidden field
+            document.getElementById("captchaHidden").value = captchaCode;
+        }
+
+        // Function to validate the form
+        function validateForm() {
+            var enteredCaptcha = document.getElementById("captchaInput").value;
+            var actualCaptcha = document.getElementById("captchaHidden").value;
+
+            if (enteredCaptcha !== actualCaptcha) {
+                alert("CAPTCHA code is incorrect. Please try again.");
+                return false; // Prevent form submission
+            }
+            
+            // Check if username and password are filled (add your validation logic here)
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            
+            if (!username || !password) {
+                alert("Please fill in both username and password.");
+                return false; // Prevent form submission
+            }
+            
+            // If all checks pass, display "Login Successfully"
+            alert("Login Successfully");
+            return true; // Allow form submission
+        }
+
+        // Initialize the CAPTCHA on page load
+        window.onload = generateCaptcha;
+    </script>
+</body>
+</html>
